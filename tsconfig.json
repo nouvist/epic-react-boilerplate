@@ -13,6 +13,6 @@
       "@/*": ["./*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.vue", "src/index.tsx"],
+  "include": ["src/**/*.ts", "src/index.tsx", "src/**/*.js", "src/**/*.jsx"],
   "exclude": ["node_nodules", "dist"]
 }
