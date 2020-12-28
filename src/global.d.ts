@@ -1,9 +1,14 @@
-declare module '*.vue' {
-  import { DefineComponent } from 'vue';
-
-  const component: DefineComponent;
-  export default component;
+declare module '@/assets/*' {
+  const path: string;
+  export default path;
 }
 
-declare module '*.scss';
-declare module '*.css';
+declare module '*.css' {
+  const css: { [k: string]: string };
+  export default css;
+}
+
+declare module '*.scss' {
+  const css: { [k: string]: string };
+  export default css;
+}

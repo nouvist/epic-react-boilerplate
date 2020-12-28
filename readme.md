@@ -1,4 +1,4 @@
-# `🌵 Epic Vue Boilerplate`
+# `🌵 Epic React Boilerplate`
 
 <p align="center">
   <img src="./src/assets/logo.svg"/>
@@ -7,7 +7,7 @@
 [![use template](https://img.shields.io/badge/-use%20template-gree?style=for-the-badge)](../../generate)
 
 - Typescript
-- Vue 3
+- React
 - Sass
 - Webpack
 - Obfuscator

@@ -1,2 +1,8 @@
-// put your sass variable here
-$my-color: #ffffff;
+:global(body) {
+  margin: 0;
+}
+:global(#app) {
+  display: flex;
+  flex-direction: column;
+  margin: 100px;
+}

@@ -1,7 +1,6 @@
 const copyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { VueLoaderPlugin } = require('vue-loader');
 const WebpackObfuscatorPlugin = require('webpack-obfuscator');
 const { GenerateSW } = require('workbox-webpack-plugin');
 
@@ -11,7 +10,7 @@ const { GenerateSW } = require('workbox-webpack-plugin');
  * @returns {import('webpack').Configuration}
  */
 const config = (options, prod) => ({
-  entry: './index.ts',
+  entry: './index.tsx',
   context: `${__dirname}/src`,
   output: {
     publicPath: '/',
@@ -37,7 +36,7 @@ const config = (options, prod) => ({
         devtool: 'eval-source-map',
       }),
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '@': `${__dirname}/src`,
     },
@@ -45,12 +44,17 @@ const config = (options, prod) => ({
   module: {
     rules: [
       {
-        test: /\.[tj]s$/i,
+        test: /\.[tj]sx?$/i,
         exclude: /(node_modules|dist|static)/i,
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-typescript', '@babel/preset-env'],
+            presets: [
+              '@babel/preset-react',
+              '@babel/preset-typescript',
+              '@babel/preset-env',
+            ],
+            plugins: ['@babel/plugin-proposal-class-properties'],
           },
         },
       },
@@ -59,23 +63,18 @@ const config = (options, prod) => ({
         exclude: /(node_modules|dist|static)/i,
         use: [
           ...(prod ? [MiniCssExtractPlugin.loader] : ['style-loader']),
-          'css-loader',
           {
-            loader: 'sass-loader',
+            loader: 'css-loader',
             options: {
-              additionalData: '@import "@/index.scss";',
+              modules: true,
             },
           },
+          'sass-loader',
           'postcss-loader',
         ],
       },
       {
-        test: /\.vue$/i,
-        exclude: /(node_modules|dist|static)/i,
-        use: 'vue-loader',
-      },
-      {
-        test: /\.(?!vue|s?css|[tj]s|html$)(.+$)/i,
+        test: /\.(?!vue|s?css|[tj]sx?|html$)(.+$)/i,
         exclude: /(node_modules|dist|static)/i,
         use: {
           loader: 'file-loader',
@@ -87,8 +86,6 @@ const config = (options, prod) => ({
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin(),
-    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({
       template: `${__dirname}/static/index.html`,
       filename: 'index.html',
@@ -96,6 +93,7 @@ const config = (options, prod) => ({
     }),
     ...(prod
       ? [
+          new MiniCssExtractPlugin(),
           new WebpackObfuscatorPlugin(),
           new copyWebpackPlugin({
             patterns: ['../static'],
@@ -114,4 +112,5 @@ const config = (options, prod) => ({
  * @param {import('webpack').Configuration} options
  * @returns {import('webpack').Configuration}
  */
-module.exports = (env, options) => config(options, options.mode == 'production');
+module.exports = (env, options) =>
+  config(options, options.mode == 'production');
