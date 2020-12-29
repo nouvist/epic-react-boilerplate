@@ -18,23 +18,22 @@ const config = (options, prod) => ({
     filename: 'js/[hash].js',
   },
   mode: options.mode,
-  devServer: {
-    port: 8080,
-    contentBase: `${__dirname}/static`,
-    historyApiFallback: true,
-    watchOptions: {
-      ignored: [
-        `${__dirname}/node_modules`,
-        `${__dirname}/dist`,
-        `${__dirname}/static`,
-      ],
+  ...(!prod && {
+    devServer: {
+      port: 3000,
+      contentBase: `${__dirname}/static`,
+      historyApiFallback: true,
+      watchOptions: {
+        ignored: [
+          `${__dirname}/node_modules`,
+          `${__dirname}/dist`,
+          `${__dirname}/static`,
+        ],
+      },
+      hot: true,
     },
-  },
-  ...(prod
-    ? {}
-    : {
-        devtool: 'eval-source-map',
-      }),
+    devtool: 'eval-source-map',
+  }),
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
@@ -69,8 +68,15 @@ const config = (options, prod) => ({
               modules: true,
             },
           },
+          {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [require('autoprefixer')],
+              },
+            },
+          },
           'sass-loader',
-          'postcss-loader',
         ],
       },
       {

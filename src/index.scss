@@ -1,8 +1,10 @@
-:global(body) {
-  margin: 0;
-}
-:global(#app) {
-  display: flex;
-  flex-direction: column;
-  margin: 100px;
+:global {
+  body {
+    margin: 0;
+  }
+  #app {
+    display: flex;
+    flex-direction: column;
+    margin: 100px;
+  }
 }
